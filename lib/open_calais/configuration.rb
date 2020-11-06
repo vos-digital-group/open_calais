@@ -7,17 +7,21 @@ module OpenCalais
       :api_key,
       :adapter,
       :endpoint,
+      :params,
       :user_agent
     ].freeze
 
     # this you need to get from open calais - go register!
     DEFAULT_API_KEY = nil
 
+    DEFAULT_PARAMS = {}
+
     # Adapters are whatever Faraday supports - I like excon alot, so I'm defaulting it
     DEFAULT_ADAPTER = :excon
 
     # The api endpoint to get REST info from opencalais
-    DEFAULT_ENDPOINT = 'https://api-eit.refinitiv.com/permid/calais'.freeze
+    # DEFAULT_ENDPOINT = 'https://api-eit.refinitiv.com/permid/calais'.freeze
+    DEFAULT_ENDPOINT = 'http://vdprops2.evntl.com:8080/wiki/elastic'.freeze
 
     # The value sent in the http header for 'User-Agent' if none is set
     DEFAULT_USER_AGENT = "OpenCalais Ruby Gem #{OpenCalais::VERSION}".freeze
@@ -49,6 +53,7 @@ module OpenCalais
     def reset!
       self.api_key       	    = DEFAULT_API_KEY
       self.adapter            = DEFAULT_ADAPTER
+      self.params             = DEFAULT_PARAMS
       self.endpoint           = DEFAULT_ENDPOINT
       self.user_agent         = DEFAULT_USER_AGENT
       self
