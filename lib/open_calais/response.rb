@@ -23,7 +23,7 @@ module OpenCalais
       @relations = []
       @locations = []
 
-      parse(response, @options)
+      parse1(response, @options)
     end
 
     def merge_default_options(opts={})
@@ -74,6 +74,26 @@ module OpenCalais
       # remove social tags which are in the topics list already
       topic_names = self.topics.collect { |topic| topic[:name].downcase }
       self.tags.delete_if { |tag| topic_names.include?(tag[:name]) }
+    end
+
+    def parse1(response, options={})
+      r = response.body
+      @language = r.doc.meta.language rescue nil
+      @language = nil if @language == 'InputTextTooShort'
+      if r.present?
+        finalEntities = r.analyzed.try(:finalEntities)
+        finalEntities.each do |k|
+          key = k.split(":")[0]
+          name =  k.split(":")[1]
+          item = {
+            :guid => key,
+            :name => name.strip,
+            :type => "Person",
+            :matches => r.topMatches.to_h
+          }
+          self.entities << item
+        end
+      end
     end
 
     def parse_entity(k, v, options)

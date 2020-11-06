@@ -27,13 +27,14 @@ module OpenCalais
           'Accept'       => "#{OpenCalais::OUTPUT_FORMATS[:json]};charset=utf-8",
 
           # open calais default headers
-          OpenCalais::HEADERS[:license_id]    => api_key,
+          # OpenCalais::HEADERS[:license_id]    => api_key,
           OpenCalais::HEADERS[:content_type]  => OpenCalais::CONTENT_TYPES[:raw],
           OpenCalais::HEADERS[:output_format] => OpenCalais::OUTPUT_FORMATS[:json],
           OpenCalais::HEADERS[:language]      => 'English'
         },
         :ssl => {:verify => false},
-        :url => endpoint
+        :url => endpoint,
+        :params => params
       }.merge(opts)
       options[:headers] = options[:headers].merge(headers)
       OpenCalais::HEADERS.each{|k,v| options[:headers][v] = options.delete(k) if options.key?(k)}
