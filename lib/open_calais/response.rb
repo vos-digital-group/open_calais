@@ -81,7 +81,7 @@ module OpenCalais
       @language = r.doc.meta.language rescue nil
       @language = nil if @language == 'InputTextTooShort'
       if r.present?
-        finalEntities = r.analyzed.try(:finalEntities)
+        finalEntities = (r.analyzed.try(:finalEntities) rescue nil) || []
         finalEntities.each do |k|
           key = k.split(":")[0]
           name =  k.split(":")[1]
