@@ -36,13 +36,10 @@ module OpenCalais
       end
     end
 
-    def analyze(text, opts={})
-      raise 'Specify a value for the text' unless (text && text.length > 0)
+    def analyze(opts={})
+      # raise 'Specify a value for the text' unless (text && text.length > 0)
       options = current_options.merge(opts)
-
-      response = connection(options).post do |request|
-        request.body = text
-      end
+      response = connection(options).post
       OpenCalais::Response.new(response, options)
     end
 

@@ -78,21 +78,19 @@ module OpenCalais
 
     def parse1(response, options={})
       r = response.body
+      puts "==========+++====+++====++====+++=response"
+      puts r.inspect
+      puts "===========++++===+++====++=========response"
       @language = r.doc.meta.language rescue nil
       @language = nil if @language == 'InputTextTooShort'
-      if r.present?
-        finalEntities = (r.analyzed.try(:finalEntities) rescue nil) || []
-        finalEntities.each do |k|
-          key = k.split(":")[0]
-          name =  k.split(":")[1]
-          item = {
-            :guid => key,
-            :name => name.strip,
-            :type => "Person",
-            :matches => r.topMatches.to_h
-          }
-          self.entities << item
-        end
+      finalEntities = (r.entities rescue nil) || []
+      finalEntities.each do |k|
+        item = {
+          :guid => k.id,
+          :name => k.name.strip,
+          :type => k.type.titleize
+        }
+        self.entities << item
       end
     end
 
